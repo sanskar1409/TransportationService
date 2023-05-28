@@ -4,8 +4,12 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
@@ -14,6 +18,7 @@ public class TransportServices {
 
 	@Id
 	@Column(length = 10)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column(length = 20)
@@ -44,6 +49,7 @@ public class TransportServices {
 	@Column(length = 19)
 	private double monthlyFare;
 
+	@JsonBackReference
 	@OneToMany(mappedBy = "id")
 	private List<TransportServices> transportServices = new ArrayList<>();
 

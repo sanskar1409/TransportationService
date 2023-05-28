@@ -2,6 +2,8 @@ package com.onecognizant.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +25,7 @@ public class SubscriptionPayments {
 	@Column(length = 20)
 	private String paymentMode;
 
+	@JsonManagedReference
 	@ManyToOne(cascade = CascadeType.MERGE)
 	private TransportSubscriptions transportSubscriptions;
 
