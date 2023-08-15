@@ -1,6 +1,5 @@
 package com.onecognizant.service.impl;
 
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,12 @@ public class TransportServicesServiceImpl implements TransportServicesService {
 	public Set<TransportServices> getAllTransportServicesWhichContain(String pickupLocation) {
 
 		return transportServicesRepository.findByOnRoutePickupPointsContainsAllIgnoreCase(pickupLocation);
+	}
+
+	@Override
+	public TransportServices findById(int id) {
+
+		return transportServicesRepository.findById(id).get();
 	}
 
 }

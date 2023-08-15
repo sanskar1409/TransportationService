@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -21,6 +23,7 @@ public class TransportSubscriptions {
 
 	@Id
 	@Column(length = 10)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	@Column(length = 6)
@@ -34,11 +37,10 @@ public class TransportSubscriptions {
 	@Pattern(regexp = "^(Active|Expired|Cancelled)$")
 	private String subscriptionStatus;
 
-	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.MERGE)
+	@JsonBackReference
 	private TransportServices transportService;
 
-	@JsonManagedReference
 	@OneToMany(mappedBy = "id")
 	private List<SubscriptionPayments> subscriptionPayment = new ArrayList<>();
 

@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,9 @@ import com.onecognizant.entity.TransportServices;
 import com.onecognizant.service.TransportServicesService;
 
 @Controller
+@CrossOrigin
 @RequestMapping("/api/transports")
+
 public class TransportsController {
 
 	@Autowired
@@ -77,5 +80,6 @@ public class TransportsController {
 		return ResponseEntity.ok(request);
 
 	}
+	
 
 }

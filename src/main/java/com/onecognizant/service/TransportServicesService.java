@@ -8,4 +8,6 @@ public interface TransportServicesService {
 	void addNewService(TransportServices transportServices);
 
 	Set<TransportServices> getAllTransportServicesWhichContain(String pickupLocation);
+
+	TransportServices findById(int id);
 }

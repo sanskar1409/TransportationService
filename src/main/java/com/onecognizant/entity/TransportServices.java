@@ -18,7 +18,7 @@ public class TransportServices {
 
 	@Id
 	@Column(length = 10)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	@Column(length = 20)
@@ -49,8 +49,8 @@ public class TransportServices {
 	@Column(length = 19)
 	private double monthlyFare;
 
-	@JsonBackReference
 	@OneToMany(mappedBy = "id")
+	@JsonBackReference
 	private List<TransportServices> transportServices = new ArrayList<>();
 
 	public int getId() {
