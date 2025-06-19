@@ -44,17 +44,6 @@ class TransportationServiceApplicationTests {
             
     }
     
-//    @Test
-//    void testDeleteSubscriptionById() throws Exception {
-//        
-//        String deleteUrl = "/api/subscriptions/101/unsubscribe";
-//
-//        mockMvc.perform(delete(deleteUrl))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-//            
-//    }
-    
     @Test
     void testCreateSubscription() throws Exception {
         
@@ -68,21 +57,5 @@ class TransportationServiceApplicationTests {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json("{ \"message\": \"Subscription created successfully\" }"));
     }
-    
-//    @Test
-//    void testAddNewService() throws Exception {
-//        
-//        String requestBody = "{ \"currentCapacity\": 1, \"driverPhoneNumber\": 9001281324, \"maximumCapacity\": 30, \"monthlyFare\": 97.00, \"onRoutePickupPoints\": \"d, e, f, g\", \"pickupLocation\": \"d\", \"returnTime\": \"07:10:00\", \"startTime\": \"07:00:00\", \"vehicleNo\": \"MH31FJ1175\", \"vehicleType\": 2 }";
-//
-//        
-//        mockMvc.perform(post("/api/transports/addNewService")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(requestBody))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(content().json("{ \"message\": \"New service added successfully\" }"));
-//        
-//    }
-    
 
 }

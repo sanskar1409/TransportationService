@@ -1,20 +1,11 @@
 package com.onecognizant.controller;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.onecognizant.entity.SubscriptionPayments;
 import com.onecognizant.entity.TransportServices;
@@ -23,7 +14,7 @@ import com.onecognizant.service.SubscriptionPaymentService;
 import com.onecognizant.service.TransportServicesService;
 import com.onecognizant.service.TransportSubscriptionsService;
 
-@Controller
+@RestController
 @CrossOrigin
 @RequestMapping("/api/subscriptions")
 
@@ -37,8 +28,6 @@ public class SubscriptionsController {
 
 	@Autowired
 	private TransportServicesService transportServicesService;
-
-//	Getting errors some validation are remaining 
 
 	@PostMapping("/new")
 	ResponseEntity<String> serviceSubscribe(@RequestBody TransportSubscriptions transportSubscriptions)
@@ -77,8 +66,6 @@ public class SubscriptionsController {
 					.findById(newSubscription.getTransportService().getId());
 
 			Double monthlyFair = transportServices.getMonthlyFare();
-
-//			We can improve logic here 
 
 			Double dailyFair = monthlyFair / 30;
 
