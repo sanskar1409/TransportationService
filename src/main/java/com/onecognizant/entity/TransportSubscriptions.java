@@ -27,7 +27,7 @@ public class TransportSubscriptions {
 	private int id;
 
 	@Column(length = 6)
-	private String subscribedByEmployee;
+	private Integer subscribedByEmployee;
 
 	private LocalDate subscriptionStartDate;
 
@@ -52,13 +52,15 @@ public class TransportSubscriptions {
 		this.id = id;
 	}
 
-	public String getSubscribedByEmployee() {
+
+	public Integer getSubscribedByEmployee() {
 		return subscribedByEmployee;
 	}
 
-	public void setSubscribedByEmployee(String subscribedByEmployee) {
+	public void setSubscribedByEmployee(Integer subscribedByEmployee) {
 		this.subscribedByEmployee = subscribedByEmployee;
 	}
+
 
 	public LocalDate getSubscriptionStartDate() {
 		return subscriptionStartDate;
@@ -100,7 +102,7 @@ public class TransportSubscriptions {
 		this.subscriptionPayment = subscriptionPayment;
 	}
 
-	public TransportSubscriptions(int id, String subscribedByEmployee, LocalDate subscriptionStartDate,
+	public TransportSubscriptions(int id, int subscribedByEmployee, LocalDate subscriptionStartDate,
 			LocalDate subscriptionEndDate, String subscriptionStatus, TransportServices transportService,
 			List<SubscriptionPayments> subscriptionPayment) {
 		super();

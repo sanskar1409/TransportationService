@@ -1,37 +1,40 @@
 package com.onecognizant.service.impl;
 
+import com.onecognizant.dto.TransportSubscriptionDTO;
+import com.onecognizant.entity.TransportServices;
+import com.onecognizant.entity.TransportSubscriptions;
+import com.onecognizant.mapper.TransportSubscriptionMapper;
+import com.onecognizant.repository.TransportSubscriptionsRepository;
+import com.onecognizant.service.TransportServicesService;
+import com.onecognizant.service.TransportSubscriptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.onecognizant.entity.TransportSubscriptions;
-import com.onecognizant.repository.TransportSubscriptionsRepository;
-import com.onecognizant.service.TransportSubscriptionsService;
 
 @Service
 public class TransportSubscriptionsServiceImpl implements TransportSubscriptionsService {
 
 	@Autowired
-	private TransportSubscriptionsRepository transportSubscriptionsRepository;
+	private TransportSubscriptionsRepository repository;
+
+	@Autowired
+	private TransportServicesService transportServicesService;
 
 	@Override
-	public void addSubscription(TransportSubscriptions transportSubscriptions) {
-		// TODO Auto-generated method stub
-
-		transportSubscriptionsRepository.save(transportSubscriptions);
-
+	public void addSubscription(TransportSubscriptionDTO dto) {
+		TransportServices service = transportServicesService.findById(dto.getTransportServiceId());
+		TransportSubscriptions entity = TransportSubscriptionMapper.toEntity(dto, service);
+		repository.save(entity);
 	}
 
 	@Override
-	public TransportSubscriptions findSubscriptionById(int id) {
-
-		return transportSubscriptionsRepository.findById(id).get();
+	public TransportSubscriptionDTO findSubscriptionById(int id) {
+		TransportSubscriptions entity = repository.findById(id).orElse(null);
+		if (entity == null) return null;
+		return TransportSubscriptionMapper.toDTO(entity);
 	}
 
 	@Override
 	public void deleteSubscription(int id) {
-
-		transportSubscriptionsRepository.deleteById(id);
-
+		repository.deleteById(id);
 	}
-
 }

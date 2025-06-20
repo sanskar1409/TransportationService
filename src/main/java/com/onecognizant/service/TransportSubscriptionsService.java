@@ -1,13 +1,12 @@
 package com.onecognizant.service;
 
-import com.onecognizant.entity.TransportSubscriptions;
+import com.onecognizant.dto.TransportSubscriptionDTO;
 
 public interface TransportSubscriptionsService {
 
-	void addSubscription(TransportSubscriptions transportSubscriptions);
+	void addSubscription(TransportSubscriptionDTO dto);
 
-	TransportSubscriptions findSubscriptionById(int id);
+	TransportSubscriptionDTO findSubscriptionById(int id);
 
 	void deleteSubscription(int id);
-	
 }

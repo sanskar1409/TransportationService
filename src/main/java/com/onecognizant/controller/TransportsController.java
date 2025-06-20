@@ -2,6 +2,8 @@ package com.onecognizant.controller;
 
 import java.util.Set;
 
+import com.onecognizant.dto.TransportServiceDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,48 +21,12 @@ public class TransportsController {
 	private TransportServicesService transportServicesService;
 
 	@PostMapping("/addNewService")
-	ResponseEntity<String> addNewTransportService(@RequestBody TransportServices transportServices) throws Exception {
-
-		TransportServices newService = new TransportServices();
-
-		try {
-
-			newService.setId(transportServices.getId());
-
-			if (transportServices.getStartTime().isBefore(transportServices.getReturnTime())) {
-				newService.setStartTime(transportServices.getStartTime());
-				newService.setReturnTime(transportServices.getReturnTime());
-			} else {
-				throw new Exception("Return time must also be greater than start time....");
-			}
-
-			if (transportServices.getDriverPhoneNumber().length() == 10) {
-				newService.setDriverPhoneNumber(transportServices.getDriverPhoneNumber());
-			} else {
-				throw new Exception("Please enter valid Phone number");
-			}
-
-			if (transportServices.getMaximumCapacity() > transportServices.getCurrentCapacity()) {
-				newService.setCurrentCapacity(transportServices.getCurrentCapacity());
-				newService.setMaximumCapacity(transportServices.getMaximumCapacity());
-			} else {
-				throw new Exception("Current capacity should not exceed maximum capacity...");
-			}
-
-			newService.setMonthlyFare(transportServices.getMonthlyFare());
-			newService.setOnRoutePickupPoints(transportServices.getOnRoutePickupPoints());
-			newService.setPickupLocation(transportServices.getPickupLocation());
-			newService.setVehicleNo(transportServices.getVehicleNo());
-			newService.setVehicleType(transportServices.getVehicleType());
-
-			transportServicesService.addNewService(newService);
-
-		} catch (Exception e) {
-			throw new Exception(e.getLocalizedMessage());
-		}
-
+	public ResponseEntity<String> addNewTransportService(@Valid @RequestBody TransportServiceDTO dto) {
+		transportServicesService.addNewService(dto);
 		return ResponseEntity.ok("New Service added successfully");
 	}
+
+
 
 	@GetMapping("/{pickupPoints}")
 	ResponseEntity<Set<TransportServices>> getAllTransportServicesWhichContain(

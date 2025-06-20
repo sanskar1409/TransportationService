@@ -10,6 +10,6 @@ import com.onecognizant.entity.TransportServices;
 
 @Repository
 public interface TransportServicesRepository extends JpaRepository<TransportServices, Integer> {
-
+	Set<TransportServices> findByPickupLocationContainingIgnoreCase(String pickupLocation);
 	Set<TransportServices> findByOnRoutePickupPointsContainsAllIgnoreCase(String pickupPoints);
 }

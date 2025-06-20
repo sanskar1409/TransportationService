@@ -3,6 +3,9 @@ package com.onecognizant.controller;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import com.onecognizant.dto.TransportSubscriptionDTO;
+import com.onecognizant.mapper.TransportSubscriptionMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +20,6 @@ import com.onecognizant.service.TransportSubscriptionsService;
 @RestController
 @CrossOrigin
 @RequestMapping("/api/subscriptions")
-//anurag 
 public class SubscriptionsController {
 
 	@Autowired
@@ -30,78 +32,20 @@ public class SubscriptionsController {
 	private TransportServicesService transportServicesService;
 
 	@PostMapping("/new")
-	ResponseEntity<String> serviceSubscribe(@RequestBody TransportSubscriptions transportSubscriptions)
-			throws Exception {
-
-		try {
-
-			TransportSubscriptions newSubscription = new TransportSubscriptions();
-
-			newSubscription.setId(transportSubscriptions.getId());
-			newSubscription.setSubscribedByEmployee(transportSubscriptions.getSubscribedByEmployee());
-
-			newSubscription.setTransportService(transportSubscriptions.getTransportService());
-
-			if (transportSubscriptions.getSubscriptionStartDate()
-					.isBefore(transportSubscriptions.getSubscriptionEndDate())) {
-				newSubscription.setSubscriptionStartDate(transportSubscriptions.getSubscriptionStartDate());
-				newSubscription.setSubscriptionEndDate(transportSubscriptions.getSubscriptionEndDate());
-			} else {
-				throw new Exception("Subscription end date should not be less then subscription start date...");
-			}
-
-			if (transportSubscriptions.getSubscriptionEndDate().isAfter(LocalDate.now())) {
-				newSubscription.setSubscriptionStatus("Active");
-			} else {
-				newSubscription.setSubscriptionStatus("Expired");
-			}
-
-			SubscriptionPayments subscriptionPayments = new SubscriptionPayments();
-
-			subscriptionPayments.setTransportSubscriptions(newSubscription);
-			subscriptionPayments.setPaymentDate(LocalDate.now());
-			subscriptionPayments.setPaymentMode("Online G-Pay");
-
-			TransportServices transportServices = transportServicesService
-					.findById(newSubscription.getTransportService().getId());
-
-			Double monthlyFair = transportServices.getMonthlyFare();
-
-			Double dailyFair = monthlyFair / 30;
-
-			System.out.println(dailyFair);
-
-			Long daysBetween = ChronoUnit.DAYS.between(newSubscription.getSubscriptionStartDate(),
-					newSubscription.getSubscriptionEndDate());
-
-			System.out.println(daysBetween);
-
-			Double fairAmount = dailyFair * daysBetween;
-
-			subscriptionPayments.setAmount(fairAmount);
-
-			int currentCapacity = transportServices.getCurrentCapacity() + 1;
-			if (currentCapacity < transportServices.getMaximumCapacity()) {
-
-				transportServices.setCurrentCapacity(currentCapacity);
-			} else {
-				throw new Exception("Maximum capacity reached... Please find another service");
-			}
-
-			transportSubscriptionsService.addSubscription(newSubscription);
-
-			subscriptionPaymentService.addPaymentDetails(subscriptionPayments);
-
-		} catch (Exception e) {
-			throw new Exception(e.getLocalizedMessage());
-		}
-
+	public ResponseEntity<String> serviceSubscribe(@Valid @RequestBody TransportSubscriptionDTO dto) {
+		TransportSubscriptions subscription = new TransportSubscriptions();
+		subscription.setSubscribedByEmployee(dto.getSubscribedByEmployee());
+		subscription.setSubscriptionStartDate(dto.getSubscriptionStartDate());
+		subscription.setSubscriptionEndDate(dto.getSubscriptionEndDate());
+		// ... fetch transportService by ID and set it
+		transportSubscriptionsService.addSubscription(dto);
 		return ResponseEntity.ok("Successfully Subscribed to service...");
 	}
 
+
 	@GetMapping("/{id}")
-	ResponseEntity<TransportSubscriptions> findSubscriptionById(@PathVariable("id") int id) {
-		TransportSubscriptions request = transportSubscriptionsService.findSubscriptionById(id);
+	ResponseEntity<TransportSubscriptionDTO> findSubscriptionById(@PathVariable("id") int id) {
+		TransportSubscriptionDTO request = transportSubscriptionsService.findSubscriptionById(id);
 
 		if (request == null) {
 			return ResponseEntity.notFound().build();
@@ -111,34 +55,38 @@ public class SubscriptionsController {
 	}
 
 	@DeleteMapping("/{id}/unsubscribe")
-	ResponseEntity<String> deleteSubscriptionById(@PathVariable("id") int id) {
+	public ResponseEntity<String> deleteSubscriptionById(@PathVariable("id") int id) {
 
-		TransportSubscriptions request = transportSubscriptionsService.findSubscriptionById(id);
-
-		SubscriptionPayments subscription = subscriptionPaymentService.getSubscriptionByTransportSubscription(request);
-
-		request.setSubscriptionStatus("Cancelled");
-		double returnAmount = subscription.getAmount();
-
-		if (request.getSubscriptionStartDate().isBefore(LocalDate.now())) {
-			Long daysBetween = ChronoUnit.DAYS.between(request.getSubscriptionStartDate(),
-					request.getSubscriptionEndDate());
-
-			Double perDayFair = returnAmount / daysBetween;
-
-			Long remainingDays = ChronoUnit.DAYS.between(LocalDate.now(), request.getSubscriptionEndDate());
-			returnAmount = perDayFair * remainingDays;
+		TransportSubscriptionDTO dto = transportSubscriptionsService.findSubscriptionById(id);
+		if (dto == null) {
+			return ResponseEntity.notFound().build();
 		}
 
-		TransportServices transportServices = transportServicesService.findById(request.getTransportService().getId());
+		TransportSubscriptions entity = TransportSubscriptionMapper.toEntity(
+				dto,
+				transportServicesService.findById(dto.getTransportServiceId())
+		);
 
-		int currentCapacity = transportServices.getCurrentCapacity() - 1;
-		transportServices.setCurrentCapacity(currentCapacity);
+		SubscriptionPayments subscription = subscriptionPaymentService.getSubscriptionByTransportSubscription(entity);
+
+		entity.setSubscriptionStatus("Cancelled");
+		double returnAmount = subscription.getAmount();
+
+		if (entity.getSubscriptionStartDate().isBefore(LocalDate.now())) {
+			long daysBetween = ChronoUnit.DAYS.between(entity.getSubscriptionStartDate(), entity.getSubscriptionEndDate());
+			double perDayFare = returnAmount / daysBetween;
+			long remainingDays = ChronoUnit.DAYS.between(LocalDate.now(), entity.getSubscriptionEndDate());
+			returnAmount = perDayFare * remainingDays;
+		}
+
+		TransportServices transportServices = transportServicesService.findById(entity.getTransportService().getId());
+		transportServices.setCurrentCapacity(transportServices.getCurrentCapacity() - 1);
 
 		subscriptionPaymentService.deleteSubscriptionPaymentById(subscription.getId());
+		transportSubscriptionsService.deleteSubscription(id);
 
-		return ResponseEntity.ok("Successfully Unsubscribed for service. Amount " + returnAmount
-				+ " will be returned in 7 business days...");
+		return ResponseEntity.ok("Successfully Unsubscribed. Amount " + returnAmount + " will be returned in 7 business days.");
 	}
+
 
 }

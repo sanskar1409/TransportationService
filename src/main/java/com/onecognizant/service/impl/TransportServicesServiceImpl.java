@@ -2,6 +2,8 @@ package com.onecognizant.service.impl;
 
 import java.util.Set;
 
+import com.onecognizant.dto.TransportServiceDTO;
+import com.onecognizant.mapper.TransportServiceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,25 +15,21 @@ import com.onecognizant.service.TransportServicesService;
 public class TransportServicesServiceImpl implements TransportServicesService {
 
 	@Autowired
-	private TransportServicesRepository transportServicesRepository;
+	private TransportServicesRepository transportRepository;
 
 	@Override
-	public void addNewService(TransportServices transportServices) {
-
-		transportServicesRepository.save(transportServices);
-
+	public void addNewService(TransportServiceDTO dto) {
+		TransportServices entity = TransportServiceMapper.toEntity(dto);
+		transportRepository.save(entity);
 	}
 
 	@Override
 	public Set<TransportServices> getAllTransportServicesWhichContain(String pickupLocation) {
-
-		return transportServicesRepository.findByOnRoutePickupPointsContainsAllIgnoreCase(pickupLocation);
+		return transportRepository.findByPickupLocationContainingIgnoreCase(pickupLocation);
 	}
 
 	@Override
 	public TransportServices findById(int id) {
-
-		return transportServicesRepository.findById(id).get();
+		return transportRepository.findById(id).orElse(null);
 	}
-
 }

@@ -35,7 +35,8 @@ public class TransportServices {
 	private String vehicleNo;
 
 	@Column(length = 10)
-	private int vehicleType;
+	private String vehicleType;
+
 
 	@Column(length = 10, unique = true)
 	private String driverPhoneNumber;
@@ -101,13 +102,15 @@ public class TransportServices {
 		this.vehicleNo = vehicleNo;
 	}
 
-	public int getVehicleType() {
-		return vehicleType;
+
+	public String getVehicleType() {
+	 	return vehicleType;
 	}
 
-	public void setVehicleType(int vehicleType) {
-		this.vehicleType = vehicleType;
+	public void setVehicleType(String vehicleType) {
+		 this.vehicleType = vehicleType;
 	}
+
 
 	public String getDriverPhoneNumber() {
 		return driverPhoneNumber;
@@ -150,7 +153,7 @@ public class TransportServices {
 	}
 
 	public TransportServices(int id, String pickupLocation, String onRoutePickupPoints, LocalTime startTime,
-			LocalTime returnTime, String vehicleNo, int vehicleType, String driverPhoneNumber, int maximumCapacity,
+			LocalTime returnTime, String vehicleNo, String vehicleType, String driverPhoneNumber, int maximumCapacity,
 			int currentCapacity, double monthlyFare, List<TransportServices> transportServices) {
 		super();
 		this.id = id;
