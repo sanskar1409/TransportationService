@@ -46,45 +46,35 @@ public class SubscriptionsController {
 	@GetMapping("/{id}")
 	ResponseEntity<TransportSubscriptionDTO> findSubscriptionById(@PathVariable("id") int id) {
 		TransportSubscriptionDTO request = transportSubscriptionsService.findSubscriptionById(id);
-
 		if (request == null) {
 			return ResponseEntity.notFound().build();
 		}
-
 		return ResponseEntity.ok(request);
 	}
 
 	@DeleteMapping("/{id}/unsubscribe")
 	public ResponseEntity<String> deleteSubscriptionById(@PathVariable("id") int id) {
-
 		TransportSubscriptionDTO dto = transportSubscriptionsService.findSubscriptionById(id);
 		if (dto == null) {
 			return ResponseEntity.notFound().build();
 		}
-
 		TransportSubscriptions entity = TransportSubscriptionMapper.toEntity(
 				dto,
 				transportServicesService.findById(dto.getTransportServiceId())
 		);
-
 		SubscriptionPayments subscription = subscriptionPaymentService.getSubscriptionByTransportSubscription(entity);
-
 		entity.setSubscriptionStatus("Cancelled");
 		double returnAmount = subscription.getAmount();
-
 		if (entity.getSubscriptionStartDate().isBefore(LocalDate.now())) {
 			long daysBetween = ChronoUnit.DAYS.between(entity.getSubscriptionStartDate(), entity.getSubscriptionEndDate());
 			double perDayFare = returnAmount / daysBetween;
 			long remainingDays = ChronoUnit.DAYS.between(LocalDate.now(), entity.getSubscriptionEndDate());
 			returnAmount = perDayFare * remainingDays;
 		}
-
 		TransportServices transportServices = transportServicesService.findById(entity.getTransportService().getId());
 		transportServices.setCurrentCapacity(transportServices.getCurrentCapacity() - 1);
-
 		subscriptionPaymentService.deleteSubscriptionPaymentById(subscription.getId());
 		transportSubscriptionsService.deleteSubscription(id);
-
 		return ResponseEntity.ok("Successfully Unsubscribed. Amount " + returnAmount + " will be returned in 7 business days.");
 	}
 

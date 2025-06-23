@@ -6,19 +6,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "transport_services")
 public class TransportServices {
 
 	@Id
-	@Column(length = 10)
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column(length = 20)
@@ -28,7 +24,6 @@ public class TransportServices {
 	private String onRoutePickupPoints;
 
 	private LocalTime startTime;
-
 	private LocalTime returnTime;
 
 	@Column(length = 10, unique = true)
@@ -41,13 +36,11 @@ public class TransportServices {
 	@Column(length = 10, unique = true)
 	private String driverPhoneNumber;
 
-	@Column(length = 10)
+	@Column
 	private int maximumCapacity;
-
-	@Column(length = 10)
+	@Column
 	private int currentCapacity;
-
-	@Column(length = 19)
+	@Column
 	private double monthlyFare;
 
 	@OneToMany(mappedBy = "id")

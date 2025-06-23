@@ -5,25 +5,21 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "subscription_payments")
 public class SubscriptionPayments {
 
 	@Id
-	@Column(length = 10)
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
 
 	private LocalDate paymentDate;
 
-	@Column(length = 19)
+	@Column
 	private double amount;
 
 	@Column(length = 20)

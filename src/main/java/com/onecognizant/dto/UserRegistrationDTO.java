@@ -52,4 +52,3 @@ public class UserRegistrationDTO {
         this.role = role;
     }
 }
-

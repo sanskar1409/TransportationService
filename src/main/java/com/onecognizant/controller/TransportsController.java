@@ -26,17 +26,10 @@ public class TransportsController {
 		return ResponseEntity.ok("New Service added successfully");
 	}
 
-
-
 	@GetMapping("/{pickupPoints}")
 	ResponseEntity<Set<TransportServices>> getAllTransportServicesWhichContain(
 			@PathVariable("pickupPoints") String pickupPoints) {
-
 		Set<TransportServices> request = transportServicesService.getAllTransportServicesWhichContain(pickupPoints);
-
 		return ResponseEntity.ok(request);
-
 	}
-	
-
 }
