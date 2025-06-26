@@ -19,14 +19,10 @@ public class TransportSubscriptions {
 	@Column
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
 	@Column
 	private Integer subscribedByEmployee;
-
 	private LocalDate subscriptionStartDate;
-
 	private LocalDate subscriptionEndDate;
-
 	@Column(length = 10)
 	@Pattern(regexp = "^(Active|Expired|Cancelled)$")
 	private String subscriptionStatus;
@@ -114,4 +110,16 @@ public class TransportSubscriptions {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public String toString() {
+		return "TransportSubscriptions{" +
+				"id=" + id +
+				", subscribedByEmployee=" + subscribedByEmployee +
+				", subscriptionStartDate=" + subscriptionStartDate +
+				", subscriptionEndDate=" + subscriptionEndDate +
+				", subscriptionStatus='" + subscriptionStatus + '\'' +
+				", transportService=" + transportService +
+				", subscriptionPayment=" + subscriptionPayment +
+				'}';
+	}
 }

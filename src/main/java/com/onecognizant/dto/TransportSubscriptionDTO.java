@@ -8,15 +8,16 @@ public class TransportSubscriptionDTO {
 
     @NotNull
     private Integer subscribedByEmployee;
-
     @NotNull
     private Integer transportServiceId;
-
     @NotNull
     private LocalDate subscriptionStartDate;
-
     @NotNull
     private LocalDate subscriptionEndDate;
+
+    private double amount;
+    private String paymentMethod;
+
 
     // Getters and setters
 
@@ -50,5 +51,21 @@ public class TransportSubscriptionDTO {
 
     public void setSubscriptionEndDate(@NotNull LocalDate subscriptionEndDate) {
         this.subscriptionEndDate = subscriptionEndDate;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

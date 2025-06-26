@@ -3,9 +3,11 @@ package com.onecognizant.service;
 import com.onecognizant.entity.SubscriptionPayments;
 import com.onecognizant.entity.TransportSubscriptions;
 
+
 public interface SubscriptionPaymentService {
 
-	void addPaymentDetails(SubscriptionPayments subscriptionPayments);
+
+	SubscriptionPayments save(SubscriptionPayments payment);
 
 	SubscriptionPayments getSubscriptionByTransportSubscription(TransportSubscriptions transportSubscriptions);
 

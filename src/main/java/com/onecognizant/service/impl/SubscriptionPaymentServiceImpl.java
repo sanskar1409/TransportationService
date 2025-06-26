@@ -10,15 +10,13 @@ import com.onecognizant.service.SubscriptionPaymentService;
 
 @Service
 public class SubscriptionPaymentServiceImpl implements SubscriptionPaymentService {
-
 	@Autowired
 	private SubscriptionPaymentsRepository subscriptionPaymentsRepository;
 
+
 	@Override
-	public void addPaymentDetails(SubscriptionPayments subscriptionPayments) {
-
-		subscriptionPaymentsRepository.save(subscriptionPayments);
-
+	public SubscriptionPayments save(SubscriptionPayments payment) {
+		return subscriptionPaymentsRepository.save(payment);
 	}
 
 	@Override
@@ -33,5 +31,4 @@ public class SubscriptionPaymentServiceImpl implements SubscriptionPaymentServic
 		subscriptionPaymentsRepository.deleteById(id);
 
 	}
-
 }

@@ -1,10 +1,7 @@
 package com.onecognizant.entity;
 
 import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -15,13 +12,9 @@ public class SubscriptionPayments {
 	@Column
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-
 	private LocalDate paymentDate;
-
 	@Column
 	private double amount;
-
 	@Column(length = 20)
 	private String paymentMode;
 
@@ -84,4 +77,14 @@ public class SubscriptionPayments {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public String toString() {
+		return "SubscriptionPayments{" +
+				"id=" + id +
+				", paymentDate=" + paymentDate +
+				", amount=" + amount +
+				", paymentMode='" + paymentMode + '\'' +
+				", transportSubscriptions=" + transportSubscriptions +
+				'}';
+	}
 }

@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 import com.onecognizant.dto.TransportSubscriptionDTO;
-import com.onecognizant.mapper.TransportSubscriptionMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -58,10 +57,7 @@ public class SubscriptionsController {
 		if (dto == null) {
 			return ResponseEntity.notFound().build();
 		}
-		TransportSubscriptions entity = TransportSubscriptionMapper.toEntity(
-				dto,
-				transportServicesService.findById(dto.getTransportServiceId())
-		);
+		TransportSubscriptions entity = transportSubscriptionsService.findEntityById(id);
 		SubscriptionPayments subscription = subscriptionPaymentService.getSubscriptionByTransportSubscription(entity);
 		entity.setSubscriptionStatus("Cancelled");
 		double returnAmount = subscription.getAmount();
@@ -77,6 +73,5 @@ public class SubscriptionsController {
 		transportSubscriptionsService.deleteSubscription(id);
 		return ResponseEntity.ok("Successfully Unsubscribed. Amount " + returnAmount + " will be returned in 7 business days.");
 	}
-
 
 }

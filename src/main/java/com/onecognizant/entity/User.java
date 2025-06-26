@@ -1,7 +1,6 @@
 package com.onecognizant.entity;
 
 import jakarta.persistence.*;
-
 import java.util.Objects;
 
 @Entity
@@ -14,10 +13,8 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String username;
-
     @Column(nullable = false)
     private String password;
-
     private String email;
     private String role; // e.g., USER, ADMIN
 
@@ -73,6 +70,7 @@ public class User {
                 ", role='" + role + '\'' +
                 '}';
     }
+
 
     @Override
     public boolean equals(Object o) {

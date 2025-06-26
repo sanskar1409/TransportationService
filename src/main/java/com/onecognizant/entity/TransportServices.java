@@ -16,26 +16,18 @@ public class TransportServices {
 	@Column
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
 	@Column(length = 20)
 	private String pickupLocation;
-
 	@Column(length = 100)
 	private String onRoutePickupPoints;
-
 	private LocalTime startTime;
 	private LocalTime returnTime;
-
 	@Column(length = 10, unique = true)
 	private String vehicleNo;
-
 	@Column(length = 10)
 	private String vehicleType;
-
-
 	@Column(length = 10, unique = true)
 	private String driverPhoneNumber;
-
 	@Column
 	private int maximumCapacity;
 	@Column
@@ -168,4 +160,21 @@ public class TransportServices {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public String toString() {
+		return "TransportServices{" +
+				"id=" + id +
+				", pickupLocation='" + pickupLocation + '\'' +
+				", onRoutePickupPoints='" + onRoutePickupPoints + '\'' +
+				", startTime=" + startTime +
+				", returnTime=" + returnTime +
+				", vehicleNo='" + vehicleNo + '\'' +
+				", vehicleType='" + vehicleType + '\'' +
+				", driverPhoneNumber='" + driverPhoneNumber + '\'' +
+				", maximumCapacity=" + maximumCapacity +
+				", currentCapacity=" + currentCapacity +
+				", monthlyFare=" + monthlyFare +
+				", transportServices=" + transportServices +
+				'}';
+	}
 }
