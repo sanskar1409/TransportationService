@@ -2,12 +2,12 @@ package com.onecognizant.service.impl;
 
 import java.util.Set;
 
-import com.onecognizant.dto.TransportServiceDTO;
-import com.onecognizant.mapper.TransportServiceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.onecognizant.dto.TransportServiceDTO;
 import com.onecognizant.entity.TransportServices;
+import com.onecognizant.mapper.TransportServiceMapper;
 import com.onecognizant.repository.TransportServicesRepository;
 import com.onecognizant.service.TransportServicesService;
 
@@ -31,5 +31,12 @@ public class TransportServicesServiceImpl implements TransportServicesService {
 	@Override
 	public TransportServices findById(int id) {
 		return transportRepository.findById(id).orElse(null);
+	}
+
+
+	// Optional helper method
+	public TransportServices getFirstServiceFromPune() {
+		Set<TransportServices> services = transportRepository.findByPickupLocationContainingIgnoreCase("Pune");
+		return services.stream().findFirst().orElse(null);
 	}
 }

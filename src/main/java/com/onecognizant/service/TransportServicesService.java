@@ -8,7 +8,9 @@ import com.onecognizant.mapper.TransportServiceMapper;
 
 public interface TransportServicesService {
 	void addNewService(TransportServiceDTO dto);
+
 	Set<TransportServices> getAllTransportServicesWhichContain(String pickupLocation);
+
 	TransportServices findById(int id);
 
 }
